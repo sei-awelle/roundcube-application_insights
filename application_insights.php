@@ -38,8 +38,19 @@ class application_insights extends rcube_plugin
 
         #$key = $this->rcube->config->get('application_insights_instrumentation_key');
 
-	require_once('ai.php');
+	//require_once('ai.php');
 
 	$this->include_script('snippet.js');
+
+	$this->add_hook('login_after', [$this, 'login_after']);
+
+	//login_failed
+	//message_sent
+	//message_read
+
+    }
+
+    public function login_after($args) {
+        require_once('login.php');
     }
 }
