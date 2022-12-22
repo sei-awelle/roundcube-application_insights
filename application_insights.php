@@ -32,8 +32,15 @@ class application_insights extends rcube_plugin
     //private $config = [];
     private $rcube;
 
+    private $telemetryClient;
+    private $telemetryChannel;
+    private $context;
+    private $host;
+
     public function init()
     {
+
+
         #$this->rcube = rcube::get_instance();
 
         #$key = $this->rcube->config->get('application_insights_instrumentation_key');
@@ -45,12 +52,78 @@ class application_insights extends rcube_plugin
 	$this->add_hook('login_after', [$this, 'login_after']);
 
 	//login_failed
-	//message_sent
-	//message_read
+	$this->add_hook('message_before_send', [$this, 'message_before_send']);
+	//$this->add_hook('message_sent', [$this, 'message_sent']);
+	$this->add_hook('message_read', [$this, 'message_read']);
+	//error_page
 
     }
 
+    public function setup() {
+
+	require_once __DIR__ . '/vendor/autoload.php';
+
+	$this->host = $_SERVER['SERVER_NAME'];
+
+	//TODO get url from config or env var
+	$endpointUrl = "https://usgovvirginia-1.in.applicationinsights.azure.us//v2/track";
+	//TODO get key from config or env var
+	$instrumentationKey = 'feae4ab5-7c1a-fc17-b500-d7eded81eeb2';
+	$this->telemetryChannel = new \ApplicationInsights\Channel\Telemetry_Channel($endpointUrl);
+	$this->telemetryClient = new \ApplicationInsights\Telemetry_Client(NULL, $this->telemetryChannel);
+	$this->context = $this->telemetryClient->getContext();
+        
+	// Necessary
+	$this->context->setInstrumentationKey($instrumentationKey);
+    }
+
     public function login_after($args) {
-        require_once('login.php');
+        $this->setup();
+
+	// Optional
+	$this->context->getSessionContext()->setId(session_id());
+	//$context->getUserContext()->setId('YOUR USER ID');
+	//$context->getApplicationContext()->setVer('YOUR VERSION');
+	//$context->getLocationContext()->setIp('YOUR IP');
+
+	// Start tracking
+	//$telemetryClient->trackDependency('Query table', "SQL", 'SELECT * FROM users;', time(), 122, true);
+	//$telemetryClient->trackMetric('myMetric', 42.0);
+
+	//$telemetryClient->trackDependency('POST', "HTTP", "https://roundcube.cwdoe.cmusei.dev", time(), 324, false, 503);
+	//$telemetryClient->trackRequest('POST', 'https://roundcube.cwdoe.cmusei.dev', time());
+	//$telemetryClient->trackRequest('GET', 'https://roundcube.cwdoe.cmusei.dev', time());
+
+	$name = $_SESSION['username'];
+	$this->telemetryClient->trackEvent("$this->host user $name login");
+	$this->telemetryClient->flush();
+
+    }
+
+    function message_before_send($args) {
+	$this->setup();
+	$message = $args['message'];
+	$to = $args['mailto'];
+	$from = $args['from'];
+	$options = $args['options'];
+	$headers = $message->headers();
+	$mymessage = $message->getMessage();
+	
+	$this->telemetryClient->trackEvent("$this->host user $from messge before send to $to with subject $mymessage->subject");
+	$this->telemetryClient->flush();
+    }
+
+    function message_read($args) {
+	$this->setup();
+	$uid = $args['uid'];
+	$mailbox = $args['mailbox'];
+	$name = $_SESSION['username'];
+	$message = $args['message'];
+	$to = $message->get_header('to');
+	$from = $message->get_header('from');
+	$subject = $message->get_header('subject');
+	
+	$this->telemetryClient->trackEvent("$this->host $name read $uid from $mailbox from $from to $to subject $subject");
+	$this->telemetryClient->flush();
     }
 }
