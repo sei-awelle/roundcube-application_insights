@@ -1,0 +1,36 @@
+{
+  "name": "roundcube/application_insights",
+  "description": "Adds open telemetry to roundcube",
+  "keywords": ["telemetry"],
+  "homepage": "https://www.cert.org/",
+  "license": "GPL-3.0",
+  "type": "roundcube-plugin",
+  "version": "1.0",
+  "authors": [
+    {
+      "name": "Adam Welle",
+      "email": "arwelle@cert.org",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=8.0",
+    "roundcube/plugin-installer": ">=0.1.2",
+    "symfony/http-client": "6.0.x-dev",
+    "guzzlehttp/psr7": "2.4.x-dev",
+    "open-telemetry/opentelemetry": "1.0.0beta1",
+    "psr/http-client": "1.0.x-dev",
+    "microsoft/application-insights": "dev-master"
+  },
+  "extra": {
+    "roundcube": {
+      "min-version": "1.6"
+    }
+  },
+  "minimum-stability": "dev",
+  "config": {
+    "allow-plugins": {
+      "roundcube/plugin-installer": true
+    }
+  }
+}
