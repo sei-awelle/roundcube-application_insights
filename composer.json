@@ -20,7 +20,8 @@
     "guzzlehttp/psr7": "2.4.x-dev",
     "open-telemetry/opentelemetry": "1.0.0beta1",
     "psr/http-client": "1.0.x-dev",
-    "microsoft/application-insights": "dev-master"
+    "microsoft/application-insights": "dev-master",
+    "guzzlehttp/promises": "^1.5@dev"
   },
   "extra": {
     "roundcube": {
@@ -30,7 +31,8 @@
   "minimum-stability": "dev",
   "config": {
     "allow-plugins": {
-      "roundcube/plugin-installer": true
+      "roundcube/plugin-installer": true,
+      "php-http/discovery": true
     }
   }
 }
