@@ -28,7 +28,6 @@
  */
 class application_insights extends rcube_plugin
 {
-    //public $task = '^((?!login).)*$';
     //private $config = [];
     private $rcube;
 
@@ -42,10 +41,7 @@ class application_insights extends rcube_plugin
 
 
         #$this->rcube = rcube::get_instance();
-
         #$key = $this->rcube->config->get('application_insights_instrumentation_key');
-
-	//require_once('ai.php');
 
 	$this->include_script('snippet.js');
 
@@ -66,9 +62,9 @@ class application_insights extends rcube_plugin
 	$this->host = $_SERVER['SERVER_NAME'];
 
 	//TODO get url from config or env var
-	$endpointUrl = "https://usgovvirginia-1.in.applicationinsights.azure.us//v2/track";
+	$endpointUrl = getenv('ENDPOINT_URL');
 	//TODO get key from config or env var
-	$instrumentationKey = 'feae4ab5-7c1a-fc17-b500-d7eded81eeb2';
+	$instrumentationKey = getenv('INSTRUMENTATION_KEY');
 	$this->telemetryChannel = new \ApplicationInsights\Channel\Telemetry_Channel($endpointUrl);
 	$this->telemetryClient = new \ApplicationInsights\Telemetry_Client(NULL, $this->telemetryChannel);
 	$this->context = $this->telemetryClient->getContext();
@@ -90,9 +86,6 @@ class application_insights extends rcube_plugin
 	//$telemetryClient->trackDependency('Query table', "SQL", 'SELECT * FROM users;', time(), 122, true);
 	//$telemetryClient->trackMetric('myMetric', 42.0);
 
-	//$telemetryClient->trackDependency('POST', "HTTP", "https://roundcube.cwdoe.cmusei.dev", time(), 324, false, 503);
-	//$telemetryClient->trackRequest('POST', 'https://roundcube.cwdoe.cmusei.dev', time());
-	//$telemetryClient->trackRequest('GET', 'https://roundcube.cwdoe.cmusei.dev', time());
 
 	$name = $_SESSION['username'];
 	$this->telemetryClient->trackEvent("$this->host user $name login");
