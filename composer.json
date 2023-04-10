@@ -16,7 +16,7 @@
   "require": {
     "php": ">=8.0",
     "roundcube/plugin-installer": ">=0.1.2",
-    "symfony/http-client": "6.0.x-dev",
+    "symfony/http-client": "5.4.x-dev",
     "guzzlehttp/psr7": "2.4.x-dev",
     "open-telemetry/opentelemetry": "1.0.0beta1",
     "psr/http-client": "1.0.x-dev",
