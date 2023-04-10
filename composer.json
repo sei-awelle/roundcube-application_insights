@@ -18,7 +18,7 @@
     "roundcube/plugin-installer": ">=0.1.2",
     "symfony/http-client": "6.0.x-dev",
     "guzzlehttp/psr7": "2.4.x-dev",
-    "open-telemetry/opentelemetry": "1.0.0beta1",
+    "open-telemetry/opentelemetry": "9999999-dev",
     "psr/http-client": "1.0.x-dev",
     "microsoft/application-insights": "dev-master",
     "guzzlehttp/promises": "^1.5@dev"
