@@ -21,7 +21,7 @@
     "open-telemetry/opentelemetry": "1.0.0beta1",
     "psr/http-client": "1.0.x-dev",
     "microsoft/application-insights": "dev-master",
-    "guzzlehttp/promises": "^1.5@dev"
+    "guzzlehttp/promises": "^2.0@dev"
   },
   "extra": {
     "roundcube": {
